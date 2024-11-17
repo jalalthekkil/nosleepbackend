@@ -3,13 +3,41 @@ const cors = require("cors");
 
 const app = express();
 
-// Enable CORS for all routes
-app.use(cors());
+// Enable CORS for your Firebase frontend only
+app.use(
+  cors({
+    origin: "https://stayawakemate-e252b.web.app", // Firebase app URL
+    methods: "GET,POST", // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+  })
+);
 
+// Middleware to parse JSON bodies in POST requests
+app.use(express.json());
+
+// Basic GET route
 app.get("/", (req, res) => {
-  res.json({ message: "Hey there😎!" });
+  res.json({ message: "Hey there😎! Your backend is connected." });
 });
 
+// Example POST route (you can add more routes as needed)
+app.post("/submit", (req, res) => {
+  const { username, message } = req.body;
+
+  // Basic validation for required fields
+  if (!username || !message) {
+    return res.status(400).json({ error: "Missing username or message" });
+  }
+
+  // You could add database or processing logic here
+
+  res.status(200).json({
+    success: true,
+    message: `Received message from ${username}: ${message}`,
+  });
+});
+
+// Set up the server to listen on a port (either from environment variable or fallback to 5000)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
