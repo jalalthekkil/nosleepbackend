@@ -23,7 +23,7 @@ app.use(express.json());
 
 // Basic GET route
 app.get("/", (req, res) => {
-  res.json({ message: "Hey there😎! Your backend is connected." });
+  res.json({ message: "Hey there😎!" });
 });
 
 // Example POST route
